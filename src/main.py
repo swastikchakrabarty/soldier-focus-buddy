@@ -1,9 +1,29 @@
 import cv2
 from detection import FocusDetector
 from ui_controller import SoldierUI
+from logger import StudyLogger
+
+
 
 def main():
     cascade_path = "data/haarcascades/haarcascade_frontalface_default.xml"
+    # ... previous setup code ...
+    logger = StudyLogger()
+    distraction_start = None
+
+    while True:
+        cam_frame, distracted = detector.check_presence()
+        
+        # LOGGING LOGIC
+        if distracted and distraction_start is None:
+            # You just got distracted
+            distraction_start = time.time()
+            logger.log_event("DISTRACTION_STARTED")
+        elif not distracted and distraction_start is not None:
+            # You just came back
+            duration = round(time.time() - distraction_start, 2)
+            logger.log_event("RETURNED_TO_WORK", duration)
+            distraction_start = None
     
     # ASSET PATHS (Make sure your filenames match these!)
     IDLE_VID = "assets/videos/idle_soldier.mp4"
